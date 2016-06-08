@@ -1,5 +1,5 @@
 import sys
-from main import main
+from console_game import main
 
 
 if __name__ == '__main__':
