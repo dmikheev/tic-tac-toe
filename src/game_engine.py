@@ -1,6 +1,6 @@
 from random import shuffle
 
-from tic_tac_toe_core import TicTacToeCore, MoveStatus
+from tic_tac_toe_core import TicTacToeCore, MoveStatus, MoveException
 
 
 class TicTacToeGame:
@@ -24,6 +24,7 @@ class TicTacToeGame:
         self.moveMadeHandler = options.get('onMoveMade')
         self.boardChangeHandler = options.get('onBoardChange')
         self.gameEndHandler = options.get('onGameEnd')
+        self.moveExceptionHandler = options.get('onMoveException')
 
     def play(self):
         call_handler(self.gameStartHandler)
@@ -44,13 +45,20 @@ class TicTacToeGame:
                     MoveStatus.o_move: 'o'
                 }[state.move_status]
                 active_player = self.players[active_player_char]
-                player_move_data = active_player.get_move(state.board)
-
                 core_make_move_func = {
                     'x': self._core.make_x_move,
                     'o': self._core.make_o_move
                 }[active_player_char]
-                core_make_move_func(player_move_data.row, player_move_data.col)
+
+                while True:
+                    player_move_data = active_player.get_move(state.board)
+                    try:
+                        core_make_move_func(player_move_data.row,
+                                            player_move_data.col)
+                    except MoveException as ex:
+                        call_handler(self.moveExceptionHandler, ex)
+                    else:
+                        break
 
                 call_handler(self.moveMadeHandler,
                              MoveData(active_player_char,

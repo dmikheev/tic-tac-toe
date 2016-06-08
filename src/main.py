@@ -54,7 +54,8 @@ def play_game_vs_player():
         'onGameStart': on_game_start,
         'onMoveMade': on_move_made,
         'onBoardChange': on_board_change,
-        'onGameEnd': on_game_end
+        'onGameEnd': on_game_end,
+        'onMoveException': on_move_exception
     })
     game.play()
 
@@ -81,3 +82,7 @@ def on_board_change(board):
 
 def on_game_end(winner_char):
     print('Player {winner} won!\n'.format(winner=winner_char.upper()))
+
+
+def on_move_exception(ex):
+    print(ex, end='\n')

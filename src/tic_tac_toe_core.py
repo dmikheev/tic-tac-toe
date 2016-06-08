@@ -34,11 +34,10 @@ class TicTacToeCore:
         try:
             cell_value = self._state.board[row][col]
         except IndexError:
-            raise GameException(
-                'Call to make_move() with wrong row and column')
+            raise MoveException('Made move with wrong row and column')
 
         if cell_value != '_':
-            raise GameException('Call to make_move() with unfree cell')
+            raise MoveException('Made move to unfree cell')
 
         self._state.board[row][col] = player_char
         self._update_status()
@@ -88,6 +87,10 @@ class MoveStatus(Enum):
 
 
 class GameException(Exception):
+    pass
+
+
+class MoveException(Exception):
     pass
 
 
