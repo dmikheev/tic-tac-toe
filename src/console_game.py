@@ -40,10 +40,11 @@ def main():
 def play_game_vs_ai():
     game = TicTacToeGame({
         'players': [ConsolePlayer(), AiPlayer()],
-        'onGameStart': on_game_start,
-        'onMoveMade': on_move_made,
-        'onBoardChange': on_board_change,
-        'onGameEnd': on_game_end
+        'on_game_start': on_game_start,
+        'on_move_made': on_move_made,
+        'on_board_change': on_board_change,
+        'on_game_end': on_game_end,
+        'on_move_exception': on_move_exception
     })
     game.play()
 
@@ -51,11 +52,11 @@ def play_game_vs_ai():
 def play_game_vs_player():
     game = TicTacToeGame({
         'players': [ConsolePlayer(), ConsolePlayer()],
-        'onGameStart': on_game_start,
-        'onMoveMade': on_move_made,
-        'onBoardChange': on_board_change,
-        'onGameEnd': on_game_end,
-        'onMoveException': on_move_exception
+        'on_game_start': on_game_start,
+        'on_move_made': on_move_made,
+        'on_board_change': on_board_change,
+        'on_game_end': on_game_end,
+        'on_move_exception': on_move_exception
     })
     game.play()
 
@@ -81,7 +82,10 @@ def on_board_change(board):
 
 
 def on_game_end(winner_char):
-    print('Player {winner} won!\n'.format(winner=winner_char.upper()))
+    if winner_char is None:
+        print('It\'s a tie!')
+    else:
+        print('Player {winner} won!\n'.format(winner=winner_char.upper()))
 
 
 def on_move_exception(ex):

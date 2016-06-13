@@ -26,4 +26,4 @@ class ConsolePlayer(PlayerBase):
         return PlayerMoveData(row, col)
 
     def on_game_started(self, player_char):
-        pass
+        print('You are playing as {0}\n'.format(player_char.upper()))

@@ -20,24 +20,24 @@ class TicTacToeGame:
             'o': players_copy[1]
         }
 
-        self.gameStartHandler = options.get('onGameStart')
-        self.moveMadeHandler = options.get('onMoveMade')
-        self.boardChangeHandler = options.get('onBoardChange')
-        self.gameEndHandler = options.get('onGameEnd')
-        self.moveExceptionHandler = options.get('onMoveException')
+        self.game_start_handler = options.get('on_game_start')
+        self.move_made_handler = options.get('on_move_made')
+        self.board_change_handler = options.get('on_board_change')
+        self.game_end_handler = options.get('on_game_end')
+        self.move_exception_handler = options.get('on_move_exception')
 
     def play(self):
-        call_handler(self.gameStartHandler)
+        call_handler(self.game_start_handler)
 
         for player_char in self.players:
-            call_handler(self.players[player_char], player_char)
+            self.players[player_char].on_game_started(player_char)
 
-        call_handler(self.boardChangeHandler, self._core.get_state().board)
+        call_handler(self.board_change_handler, self._core.get_state().board)
 
         while True:
             state = self._core.get_state()
             if state.move_status == MoveStatus.game_end:
-                call_handler(self.gameEndHandler, state.winner)
+                call_handler(self.game_end_handler, state.winner)
                 return
             else:
                 active_player_char = {
@@ -56,15 +56,15 @@ class TicTacToeGame:
                         core_make_move_func(player_move_data.row,
                                             player_move_data.col)
                     except MoveException as ex:
-                        call_handler(self.moveExceptionHandler, ex)
+                        call_handler(self.move_exception_handler, ex)
                     else:
                         break
 
-                call_handler(self.moveMadeHandler,
+                call_handler(self.move_made_handler,
                              MoveData(active_player_char,
                                       player_move_data.row,
                                       player_move_data.col))
-                call_handler(self.boardChangeHandler, state.board)
+                call_handler(self.board_change_handler, state.board)
 
 
 class MoveData:

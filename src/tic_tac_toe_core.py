@@ -44,6 +44,7 @@ class TicTacToeCore:
 
     def _update_status(self):
         if self._check_for_game_end():
+            self._state.move_status = MoveStatus.game_end
             return
 
         self._state.move_status = get_opposite_player_move_status(
@@ -68,15 +69,20 @@ class TicTacToeCore:
                 chars_count[cell_value] += 1
 
             if chars_count['x'] == 3:
-                self._state.move_status = MoveStatus.game_end
                 self._state.winner = 'x'
                 return True
             if chars_count['o'] == 3:
-                self._state.move_status = MoveStatus.game_end
                 self._state.winner = 'o'
                 return True
 
-        return False
+        is_tie = True
+        for line in self._state.board:
+            for cell in line:
+                if cell == '_':
+                    is_tie = False
+                    break
+
+        return is_tie
 
 
 @unique
